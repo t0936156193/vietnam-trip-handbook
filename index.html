@@ -84,6 +84,20 @@
   .wx .row .r{font-variant-numeric:tabular-nums;color:var(--mut)}
   .wx .hint{font-size:11px;color:var(--faint);margin-top:10px;font-family:"IBM Plex Mono",monospace}
 
+  /* ===== FX ===== */
+  .fx{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-top:12px}
+  .fx h3{font-size:14.5px;font-weight:900;margin-bottom:12px;letter-spacing:.03em}
+  .fx h3 span{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--faint);font-weight:500;margin-left:8px}
+  .fx .row2{display:flex;gap:10px;align-items:center}
+  .fx .cell{flex:1}
+  .fx label{display:block;font-size:11px;color:var(--mut);font-weight:700;letter-spacing:.06em;margin-bottom:4px}
+  .fx input{width:100%;border:1px solid var(--line-d);border-radius:10px;padding:10px 12px;
+    font-family:"IBM Plex Mono",monospace;font-size:16px;color:var(--ink);background:var(--bg);
+    font-variant-numeric:tabular-nums;outline:none}
+  .fx input:focus{border-color:var(--acc)}
+  .fx .swap{font-size:18px;color:var(--mut);padding-top:16px}
+  .fx .hint{font-size:11px;color:var(--faint);margin-top:10px;font-family:"IBM Plex Mono",monospace}
+
   /* ===== DAYS ===== */
   .day{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
     margin-bottom:16px;overflow:hidden}
@@ -215,6 +229,15 @@
   <div class="wx-grid">
     <div class="wx"><h3>胡志明市<span>HO CHI MINH</span></h3><div id="wx-hcm">載入中…</div><div class="hint" id="wx-hcm-hint"></div></div>
     <div class="wx"><h3>芹苴<span>CAN THO</span></h3><div id="wx-ct">載入中…</div><div class="hint" id="wx-ct-hint"></div></div>
+  </div>
+  <div class="fx">
+    <h3>即時匯率換算<span>VND ⇄ TWD</span></h3>
+    <div class="row2">
+      <div class="cell"><label>越盾 VND</label><input id="fx-vnd" type="text" inputmode="numeric" value="100,000"></div>
+      <div class="swap">⇄</div>
+      <div class="cell"><label>台幣 TWD</label><input id="fx-twd" type="text" inputmode="decimal"></div>
+    </div>
+    <div class="hint" id="fx-hint">匯率載入中…</div>
   </div>
 </section>
 
@@ -615,6 +638,25 @@
       document.getElementById(c.id).textContent = '暫時載入不到天氣資料，請稍後重整。';
     });
   });
+})();
+// 即時匯率 VND ⇄ TWD
+(function(){
+  var vnd = document.getElementById('fx-vnd'), twd = document.getElementById('fx-twd');
+  var hint = document.getElementById('fx-hint');
+  var rate = 0; // 1 TWD = rate VND
+  function fmt(n, dec){ return n.toLocaleString('en-US', {maximumFractionDigits: dec}); }
+  function num(s){ return parseFloat(String(s).replace(/[^0-9.]/g, '')) || 0; }
+  fetch('https://open.er-api.com/v6/latest/TWD').then(function(r){return r.json()}).then(function(j){
+    rate = j.rates.VND;
+    hint.textContent = '1 TWD ≈ ' + fmt(rate, 0) + ' VND ・ 1,000 VND ≈ NT$' + fmt(1000/rate, 2) +
+      ' ・ 更新 ' + new Date(j.time_last_update_utc).toLocaleDateString('zh-TW');
+    fromVnd();
+  }).catch(function(){ hint.textContent = '匯率載入失敗，粗算：1 台幣 ≈ 800 越盾'; });
+  function fromVnd(){ if(rate){ twd.value = fmt(num(vnd.value)/rate, 1); } }
+  function fromTwd(){ if(rate){ vnd.value = fmt(num(twd.value)*rate, 0); } }
+  vnd.addEventListener('input', fromVnd);
+  twd.addEventListener('input', fromTwd);
+  vnd.addEventListener('blur', function(){ vnd.value = fmt(num(vnd.value), 0); });
 })();
 </script>
 </body>
