@@ -568,19 +568,32 @@
   CITIES.forEach(function(c){
     var u = 'https://api.open-meteo.com/v1/forecast?latitude='+c.lat+'&longitude='+c.lon+
       '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max'+
-      '&timezone=Asia%2FHo_Chi_Minh&forecast_days=7';
+      '&hourly=precipitation_probability&timezone=Asia%2FHo_Chi_Minh&forecast_days=7';
     fetch(u).then(function(r){return r.json()}).then(function(j){
-      var d = j.daily, html = '';
+      var d = j.daily, hp = j.hourly.precipitation_probability, html = '';
       for(var i=0;i<d.time.length;i++){
         var dt = new Date(d.time[i]);
         var wd = '日一二三四五六'[dt.getDay()];
+        // 起雨=當天06–22時降雨機率首次>=60%；停雨=其後首次降回<40%
+        var onset = '';
+        for(var h=6;h<=22;h++){
+          var p = hp[i*24+h];
+          if(p !== undefined && p >= 60){
+            var end = 0;
+            for(var k=h+1;k<=23;k++){
+              if(hp[i*24+k] !== undefined && hp[i*24+k] < 40){ end = k; break; }
+            }
+            onset = end ? '・約'+h+'–'+end+'時有雨' : '・約'+h+'時起雨到晚';
+            break;
+          }
+        }
         html += '<div class="row"><span>'+(dt.getMonth()+1)+'.'+dt.getDate()+'（'+wd+'）'+
           (WX[d.weather_code[i]]||'—')+'</span><span class="r">'+
-          Math.round(d.temperature_2m_min[i])+'–'+Math.round(d.temperature_2m_max[i])+'° ・ 降雨 '+
-          d.precipitation_probability_max[i]+'%</span></div>';
+          Math.round(d.temperature_2m_min[i])+'–'+Math.round(d.temperature_2m_max[i])+'° ・ ☔'+
+          d.precipitation_probability_max[i]+'%'+onset+'</span></div>';
       }
       document.getElementById(c.id).innerHTML = html;
-      document.getElementById(c.id+'-hint').textContent = 'UPDATED '+new Date().toLocaleString('zh-TW');
+      document.getElementById(c.id+'-hint').textContent = 'UPDATED '+new Date().toLocaleString('zh-TW')+'・雨時區間為降雨機率升破60%到降回40%的預估';
     }).catch(function(){
       document.getElementById(c.id).textContent = '暫時載入不到天氣資料，請稍後重整。';
     });
