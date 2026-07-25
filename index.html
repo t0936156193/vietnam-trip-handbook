@@ -207,6 +207,17 @@
 
 <main class="wrap">
 
+<!-- ===== FX ===== -->
+<div class="fx" style="margin-top:28px">
+  <h3>即時匯率換算<span>VND ⇄ TWD</span></h3>
+  <div class="row2">
+    <div class="cell"><label>越盾 VND</label><input id="fx-vnd" type="text" inputmode="numeric" value="100,000"></div>
+    <div class="swap">⇄</div>
+    <div class="cell"><label>台幣 TWD</label><input id="fx-twd" type="text" inputmode="decimal"></div>
+  </div>
+  <div class="hint" id="fx-hint">匯率載入中…</div>
+</div>
+
 <!-- ===== OVERVIEW ===== -->
 <section id="overview">
   <div class="sec-head"><span class="no">01</span><h2>行程總覽</h2></div>
@@ -229,15 +240,6 @@
   <div class="wx-grid">
     <div class="wx"><h3>胡志明市<span>HO CHI MINH</span></h3><div id="wx-hcm">載入中…</div><div class="hint" id="wx-hcm-hint"></div></div>
     <div class="wx"><h3>芹苴<span>CAN THO</span></h3><div id="wx-ct">載入中…</div><div class="hint" id="wx-ct-hint"></div></div>
-  </div>
-  <div class="fx">
-    <h3>即時匯率換算<span>VND ⇄ TWD</span></h3>
-    <div class="row2">
-      <div class="cell"><label>越盾 VND</label><input id="fx-vnd" type="text" inputmode="numeric" value="100,000"></div>
-      <div class="swap">⇄</div>
-      <div class="cell"><label>台幣 TWD</label><input id="fx-twd" type="text" inputmode="decimal"></div>
-    </div>
-    <div class="hint" id="fx-hint">匯率載入中…</div>
   </div>
 </section>
 
