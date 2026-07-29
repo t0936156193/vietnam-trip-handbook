@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>行李清單｜2026 越南家族旅遊</title>
+<meta name="description" content="2026 越南行 行李打包清單 — 勾選進度會存在你的手機">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700;900&family=Noto+Sans+TC:wght@400;500;700;900&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f6f2; --card:#ffffff; --ink:#191611; --mut:#8b8478; --faint:#b6b0a4;
+    --line:#e8e4da; --line-d:#d9d4c7;
+    --acc:#d64a1e; --acc-d:#b23c15; --acc-l:#fbeee8;
+    --grn:#175c4c; --grn-l:#edf3f0;
+    --amb:#a87c1b; --amb-l:#faf3e0;
+    --r:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",-apple-system,sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.7;font-size:15.5px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:640px;margin:0 auto;padding:0 18px 90px}
+
+  .hero{background:#161d1b;color:#f4f1ea;position:relative;overflow:hidden}
+  .hero::before{content:"";position:absolute;inset:0;pointer-events:none;
+    background:
+      radial-gradient(560px 260px at 88% 0%,rgba(214,74,30,.22),transparent 60%),
+      radial-gradient(460px 240px at 0% 100%,rgba(23,92,76,.5),transparent 60%);}
+  .hero .inner{max-width:640px;margin:0 auto;padding:46px 18px 40px;position:relative}
+  .hero .kicker{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.3em;color:#c9a86a;margin-bottom:12px}
+  .hero h1{font-family:"Noto Serif TC",serif;font-weight:900;font-size:30px;letter-spacing:.04em}
+  .hero .sub{color:#b9b2a4;font-size:13.5px;margin-top:8px}
+  .hero a{color:#c9a86a;text-decoration:none;font-size:13px}
+
+  .bar{position:sticky;top:0;z-index:9;background:var(--card);border-bottom:1px solid var(--line);
+    box-shadow:0 2px 10px rgba(25,22,17,.05)}
+  .bar .in{max-width:640px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;gap:12px}
+  .track{flex:1;height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+  .fill{height:100%;width:0%;background:linear-gradient(90deg,var(--grn),#2d8a72);border-radius:99px;transition:width .25s}
+  .pct{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--grn);font-weight:700;min-width:72px;text-align:right}
+
+  h2{font-family:"Noto Serif TC",serif;font-weight:900;font-size:19px;margin:30px 0 10px;display:flex;align-items:center;gap:8px}
+  h2 .n{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--acc);letter-spacing:.1em}
+  h2 .cnt{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--faint);font-weight:500}
+  .sec{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+  .sec.done-all{border-color:#bcd6cc}
+
+  label.item{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border-bottom:1px solid var(--line);cursor:pointer;-webkit-tap-highlight-color:transparent}
+  label.item:last-child{border-bottom:none}
+  label.item:active{background:var(--grn-l)}
+  .box{flex:none;width:22px;height:22px;margin-top:3px;border:2px solid var(--line-d);border-radius:6px;
+    display:grid;place-items:center;transition:all .15s;background:#fff}
+  .box svg{width:13px;height:13px;opacity:0;transform:scale(.5);transition:all .15s}
+  input{display:none}
+  input:checked + .box{background:var(--grn);border-color:var(--grn)}
+  input:checked + .box svg{opacity:1;transform:scale(1)}
+  .txt{flex:1}
+  .txt b{font-weight:700}
+  .txt small{display:block;color:var(--mut);font-size:12.5px;line-height:1.55;margin-top:1px}
+  input:checked ~ .txt{color:var(--faint)}
+  input:checked ~ .txt b{text-decoration:line-through;text-decoration-color:var(--faint);font-weight:500}
+  input:checked ~ .txt small{color:var(--faint)}
+  .tag{display:inline-block;font-size:11px;font-weight:700;padding:0 7px;border-radius:99px;margin-left:6px;vertical-align:1px}
+  .tag.hot{background:var(--acc-l);color:var(--acc-d)}
+  .tag.hand{background:var(--amb-l);color:var(--amb)}
+
+  .foot{margin-top:36px;text-align:center;color:var(--faint);font-size:12.5px}
+  .reset{margin-top:10px;background:none;border:1px solid var(--line-d);color:var(--mut);
+    padding:7px 18px;border-radius:99px;font-size:13px;font-family:inherit;cursor:pointer}
+  .reset:active{background:var(--acc-l);color:var(--acc-d);border-color:var(--acc)}
+  .hint{background:var(--amb-l);border:1px solid #ecd9a8;border-radius:var(--r);padding:10px 14px;
+    font-size:13px;color:#6b5412;margin-top:18px}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="inner">
+    <div class="kicker">PACKING&nbsp;LIST&nbsp;—&nbsp;VIETNAM&nbsp;2026</div>
+    <h1>行李打包<span style="color:#c9a86a">清單</span></h1>
+    <div class="sub">7.31 出發｜勾選進度會自動存在你自己的手機　<a href="index.html">← 回手冊</a></div>
+  </div>
+</header>
+
+<div class="bar"><div class="in">
+  <div class="track"><div class="fill" id="fill"></div></div>
+  <div class="pct" id="pct">0 / 0</div>
+</div></div>
+
+<main class="wrap">
+
+<div class="hint">🧳 託運 23kg×1／人、手提 7kg。標 <span class="tag hand">隨身</span> 的東西不能託運。每個人用自己手機開這頁勾自己的。</div>
+
+<h2><span class="n">01</span>證件文件<span class="cnt"></span></h2>
+<div class="sec" data-g="doc">
+  <label class="item"><input type="checkbox" data-k="passport"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>護照正本</b><span class="tag hand">隨身</span><small>全家 9 本，出門前一本一本點</small></span></label>
+  <label class="item"><input type="checkbox" data-k="evisa"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>eVisa 紙本列印</b><span class="tag hand">隨身</span><small>8 人各一份（雷媽長期簽證自備）</small></span></label>
+  <label class="item"><input type="checkbox" data-k="pais"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>入境申報 QR Code 存手機</b><span class="tag hand">隨身</span><small>PAIS 確認單截圖，每人手機一份</small></span></label>
+  <label class="item"><input type="checkbox" data-k="bp"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>登機證（電子或紙本）</b><span class="tag hand">隨身</span><small>已完成報到 7 張；沛緹＋家福自理</small></span></label>
+  <label class="item"><input type="checkbox" data-k="hotel"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>飯店訂房憑證（手機可開）</b><small>IconSphere 第一晚建議印一份備查</small></span></label>
+  <label class="item"><input type="checkbox" data-k="insurance"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>旅平險保單號＋緊急電話</b><small>存手機備忘錄</small></span></label>
+  <label class="item"><input type="checkbox" data-k="copy"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>護照影本＋大頭照 2 張</b><small>掉護照補辦用，跟正本分開放</small></span></label>
+</div>
+
+<h2><span class="n">02</span>錢<span class="cnt"></span></h2>
+<div class="sec" data-g="money">
+  <label class="item"><input type="checkbox" data-k="usd"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>美金現鈔</b><span class="tag hand">隨身</span><small>百元鈔到當地換越盾＋小面額備用</small></span></label>
+  <label class="item"><input type="checkbox" data-k="card"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>信用卡 ×2（開通海外刷卡）</b><span class="tag hand">隨身</span><small>不同卡別、分開放</small></span></label>
+  <label class="item"><input type="checkbox" data-k="split"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>現金分散：你／淑雯／爸各一份</b></span></label>
+</div>
+
+<h2><span class="n">03</span>3C 通訊<span class="cnt"></span></h2>
+<div class="sec" data-g="tech">
+  <label class="item"><input type="checkbox" data-k="esim"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>eSIM ×4 買好、QR 信留著</b><span class="tag hot">急</span><small>出發當天才安裝，安裝日＝第一天</small></span></label>
+  <label class="item"><input type="checkbox" data-k="apps"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>App 下載：Grab／Google 翻譯越語離線包／Maps 離線地圖</b><small>胡志明＋芹苴兩區都先載</small></span></label>
+  <label class="item"><input type="checkbox" data-k="pb"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>行動電源</b><span class="tag hand">隨身</span><small>≤100Wh，不能託運</small></span></label>
+  <label class="item"><input type="checkbox" data-k="charger"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>多孔充電頭＋充電線</b><small>越南插座吃台灣扁腳，免轉接頭</small></span></label>
+</div>
+
+<h2><span class="n">04</span>小孩用品<span class="cnt"></span></h2>
+<div class="sec" data-g="kids">
+  <label class="item"><input type="checkbox" data-k="stroller"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>推車 ×2</b><small>登機門前托運</small></span></label>
+  <label class="item"><input type="checkbox" data-k="diaper"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>尿布・奶粉・副食品（3 天量）</b><small>之後當地超市補貨</small></span></label>
+  <label class="item"><input type="checkbox" data-k="kidmed"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>小孩藥品：退燒・腸胃・體溫計</b></span></label>
+  <label class="item"><input type="checkbox" data-k="kidwear"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>小孩備用衣物（多帶幾套）</b><small>機上＋每天出門包各放一套</small></span></label>
+</div>
+
+<h2><span class="n">05</span>藥品健康<span class="cnt"></span></h2>
+<div class="sec" data-g="med">
+  <label class="item"><input type="checkbox" data-k="mosq"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>防蚊液</b><span class="tag hot">必帶</span><small>越南蚊子多，湄公河更多</small></span></label>
+  <label class="item"><input type="checkbox" data-k="sun"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>防曬乳</b></span></label>
+  <label class="item"><input type="checkbox" data-k="elder"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>長輩慢性病藥（10 天份）＋處方箋影本</b><span class="tag hand">隨身</span></span></label>
+  <label class="item"><input type="checkbox" data-k="common"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>常備藥：腸胃藥・止痛・OK繃・暈車藥</b><small>湄公河三日車程長，暈車藥別忘</small></span></label>
+</div>
+
+<h2><span class="n">06</span>衣物雜物<span class="cnt"></span></h2>
+<div class="sec" data-g="wear">
+  <label class="item"><input type="checkbox" data-k="rain"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>摺疊傘或輕便雨衣（每人）</b><small>8 月＝雨季，午後陣雨天天有</small></span></label>
+  <label class="item"><input type="checkbox" data-k="clothes"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>快乾衣物＋一件薄長袖</b><small>車上、餐廳冷氣強</small></span></label>
+  <label class="item"><input type="checkbox" data-k="shoes"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>好走的鞋＋拖鞋或涼鞋</b><small>遊船、夜市用</small></span></label>
+  <label class="item"><input type="checkbox" data-k="wp"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>防水袋／夾鏈袋幾個</b><small>遊船護手機、裝濕衣服</small></span></label>
+  <label class="item"><input type="checkbox" data-k="aodai"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>8/2 奧黛拍照日的搭配衣物</b><small>裡面穿的、好穿脫的鞋</small></span></label>
+</div>
+
+<h2><span class="n">07</span>出發前最後確認<span class="cnt"></span></h2>
+<div class="sec" data-g="final">
+  <label class="item"><input type="checkbox" data-k="peiti"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>沛緹＋家福：登機證、入境申報完成</b></span></label>
+  <label class="item"><input type="checkbox" data-k="leima"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>雷媽：長期簽證帶了、入境申報補填</b></span></label>
+  <label class="item"><input type="checkbox" data-k="4ps"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>Pizza 4P's 7/31 晚餐訂位</b></span></label>
+  <label class="item"><input type="checkbox" data-k="meet"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12l7.5-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>群組發集合資訊：7/31 上午 11:45 桃機一航廈</b><small>行李託運 12:45 截止、13:05 登機</small></span></label>
+</div>
+
+<div class="foot">
+  進度只存在這支手機（換手機要重勾）
+  <div><button class="reset" id="reset">全部重設</button></div>
+</div>
+
+</main>
+
+<script>
+(function(){
+  var KEY='vn2026-packing';
+  var state={};
+  try{state=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var boxes=[].slice.call(document.querySelectorAll('input[type=checkbox]'));
+  boxes.forEach(function(b){
+    if(state[b.dataset.k]) b.checked=true;
+    b.addEventListener('change',function(){
+      state[b.dataset.k]=b.checked;
+      localStorage.setItem(KEY,JSON.stringify(state));
+      update();
+    });
+  });
+  function update(){
+    var done=boxes.filter(function(b){return b.checked}).length;
+    document.getElementById('fill').style.width=(done/boxes.length*100)+'%';
+    document.getElementById('pct').textContent=done+' / '+boxes.length;
+    document.querySelectorAll('.sec').forEach(function(sec){
+      var bs=[].slice.call(sec.querySelectorAll('input'));
+      var d=bs.filter(function(b){return b.checked}).length;
+      var cnt=sec.previousElementSibling.querySelector('.cnt');
+      if(cnt) cnt.textContent=d+'/'+bs.length;
+      sec.classList.toggle('done-all',d===bs.length);
+    });
+  }
+  document.getElementById('reset').addEventListener('click',function(){
+    if(confirm('確定要清空所有勾選？')){
+      state={};localStorage.removeItem(KEY);
+      boxes.forEach(function(b){b.checked=false});
+      update();
+    }
+  });
+  update();
+})();
+</script>
+</body>
+</html>
